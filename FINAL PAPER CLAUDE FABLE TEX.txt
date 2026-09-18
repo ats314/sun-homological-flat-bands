@@ -1,0 +1,1075 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=red!60!black,urlcolor=blue!70!black]{hyperref}
+
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{result}[theorem]{Computed result}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\Adj}{Adj}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\CF}{C_F}
+\newcommand{\Ldn}{L_{\downarrow}}
+\newcommand{\Lup}{L_{\uparrow}}
+\newcommand{\Ssq}{S_{\square}}
+\newcommand{\dg}{^{\dagger}}
+\newcommand{\SU}{\mathrm{SU}}
+\newcommand{\U}{\mathrm{U}}
+\newcommand{\shp}{\mathrm{shp}}
+
+\title{Homological flat bands and all-rank closed forms\\ in strong-coupling $\SU(N)$ Hamiltonian lattice gauge theory}
+
+% Author block: fill in the contact address before submission.
+\author{Alexander Smith\\[0.3em] \small Independent Researcher}
+
+\date{18 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+We study the Kogut--Susskind Hamiltonian of pure $\SU(N)$ gauge theory on a periodic cubic
+lattice, in strong-coupling perturbation theory on the charge-conjugation-odd one-plaquette
+shell. Charge-odd plaquette states are oriented $2$-chains, and we prove that the
+second-order effective Hamiltonian is $t_N$ times the down Laplacian
+$\Ldn=\partial_2\dg\partial_2$ of the cubical complex, with
+$t_N=2N(N^2-4)/[(N^2-1)(2N^2-1)(4N^2-9)]$. The spectrum on each Bloch fibre is
+$\{0,q,q\}$; the flat band is $\ker\partial_2$, of exact dimension $L^3+2$ on the
+$L^3$ torus, spanned by cube boundaries and three wrapping sheets, and it touches the
+dispersive doublet singularly at $\Gamma$. We then prove a centre-parity theorem: for even
+$N$ every odd order of the expansion vanishes identically, and for odd $N$ nothing survives
+below order $N-2$, where the only term is a one-plaquette vertex
+$-(N/(N+1))^{N-3}/((N-3)!)^2$. Hence the band is exactly flat through third order for every
+$N\ge 4$; for $\SU(3)$ the same holds by exact computation. At fourth order, exact
+computation over the field $\Q(N)$ gives every cluster cumulant as a single rational
+function of $N$; the kernel is a polynomial in the two Hodge Laplacians plus one further
+operator, which forces two of the four symmetry-allowed shape coefficients to vanish, and
+the band acquires the dispersion
+$[\alpha_N\sum_i X_i^2+\beta_N\sum_{i<j}X_iX_j]/(2\sum_i X_i)$, $X_i=1-\cos k_i$, with
+$\alpha_N=640/[N(N^2-1)^3]$ and $\beta_N$ an explicit rational function. We prove
+$\beta_N>\alpha_N>0$ for all $N\ge3$, so the minimum is at $\Gamma$, the maximum at the
+zone corner, and the bandwidth is $\alpha_N+\beta_N$. Finally, the one-plaquette problem is
+$N$ free fermions in a cosine potential minus a centre-of-mass term; we prove that in the
+$\U(N)$ model the fundamental doublet does not split below order $N-1$, which turns an
+observed cancellation between irreducible channels into a theorem at every even order and
+yields the bound $O(N^{-(m+1)})$ on the order-$m$ splitting. The observed exponent is
+$N^{-(2m-1)}$; we state what remains to prove it. The fourth-order results are computer
+assisted and rest on four assumptions that we state explicitly. All statements concern a
+fixed lattice spacing; none is a statement about the continuum limit.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Flat bands --- dispersion branches that are constant over the whole Brillouin zone ---
+are usually engineered. They arise from destructive interference on line graphs and
+related frustrated geometries \cite{Sutherland1986,Lieb1989,Mielke1991,Tasaki1992}, they
+carry compact localised states, and when they touch a dispersive band the touching is
+forced by real-space topology \cite{Bergman2008,RhimYang2019}. A unifying algebraic
+description is that the hopping matrix is a Gram matrix $MM\dg$ of a rectangular incidence
+matrix $M$, and the flat band is $\ker M\dg$ \cite{Kollar2020,Roychowdhury2024}. Closed
+two-dimensional surfaces play the same role in $2$-form spin liquids
+\cite{ChungGingras2025}, and a recent construction obtains extensive face-graph degeneracy
+from local graph topology \cite{Hazra2026}.
+
+This paper shows that the same structure appears, with no tuning, in the
+strong-coupling expansion of non-Abelian lattice gauge theory. In the Hamiltonian
+formulation \cite{KS1975} the lowest excitations at strong coupling are single plaquettes
+of fundamental flux. The charge-conjugation-odd combination changes sign when the
+orientation of the plaquette is reversed, so the charge-odd one-plaquette shell is
+canonically the space $C_2$ of $2$-chains of the spatial cubical complex. Group
+integration over the link shared by two neighbouring plaquettes then produces a hopping
+amplitude whose sign is the product of the two incidence numbers. The second-order
+effective Hamiltonian is therefore a multiple of $\partial_2\dg\partial_2$, and its zero
+modes are the $2$-cycles.
+
+\subsection{Results}
+
+We separate statements \emph{proved} in the text from statements obtained by
+\emph{exact computation}, which are labelled ``Computed result'' and come with their
+assumptions.
+
+\begin{enumerate}\itemsep3pt
+\item \textbf{Second order (proved; Section~\ref{sec:second}).} On the charge-odd
+  shell, $H_2=c_2(N)\,I+t_N\,\Ldn$ with $t_N$ as in the abstract
+  (Theorem~\ref{thm:second}). On each Bloch fibre $\Ldn(k)=q(k)I-w(k)w(k)\dg$ with
+  spectrum $\{0,q,q\}$ (Proposition~\ref{prop:bloch}). The flat band has dimension
+  $L^3+2$ (Theorem~\ref{thm:carrier}) and its Bloch vector is discontinuous at $\Gamma$
+  (Proposition~\ref{prop:singular}).
+\item \textbf{Odd orders (proved; Section~\ref{sec:odd}).} The centre-parity theorem
+  (Theorem~\ref{thm:parity}) and its closed-form vertex. Corollary: the band is flat
+  through third order for every $N\ge4$. For $\SU(3)$ the third-order operator is
+  $\tfrac{1975}{124848}\,\Ldn$ plus a scalar (Computed result~\ref{res:third}).
+\item \textbf{Fourth order (computed, with proved consequences;
+  Section~\ref{sec:fourth}).} The kernel is a Hodge polynomial plus one operator
+  (Computed result~\ref{res:hodge}); consequently two shape coefficients vanish
+  (Theorem~\ref{thm:collapse}, proved from the form). All cumulants are rational functions
+  of $N$ and $\beta_N$ is assembled from three of them (Computed result~\ref{res:closed},
+  Theorem~\ref{thm:beta}). The band extrema and bandwidth follow
+  (Theorem~\ref{thm:extrema}, proved from the closed forms), as does a single angular
+  invariant governing the coupling of the flat band to the dispersive doublet
+  (Theorem~\ref{thm:mixing}).
+\item \textbf{One plaquette as free fermions (proved; Section~\ref{sec:fermion}).} The
+  $\U(N)$ doublet does not split below order $N-1$ (Theorem~\ref{thm:nosplit}); the
+  $\SU(N)$ splitting is generated entirely by the centre-of-mass term and is
+  $O(N^{-(m+1)})$ at order $m$ (Corollary~\ref{cor:grading}). The stronger observed law
+  is Conjecture~\ref{conj:grading}.
+\end{enumerate}
+
+\subsection{Relation to earlier work}
+
+Hamiltonian strong-coupling series for glueball masses were developed in
+\cite{KSS1976,Hamer1989} and, in the Euclidean formulation, in \cite{Munster1981}; they
+are series for energies at zero momentum. After conversion between normalisations, the
+$\Gamma$-point coefficients of the charge-odd shell obtained here agree through third
+order with the $1^{+-}$ series of \cite{Hamer1989}. What is new here is the momentum
+dependence, its identification with the Laplacian of the cell complex, and the closed
+forms in $N$. Group integrals are evaluated with the Weingarten calculus
+\cite{Weingarten1978,CollinsSniady2006}. The representation of one-plaquette class
+functions by free fermions on a circle is classical \cite{GrossWitten1980,Wadia1980,
+MinahanPolychronakos1993,Douglas1993}; our use of it, to prove a cancellation in
+perturbation theory, appears to be new. Discrete Hodge theory on cell complexes goes back
+to \cite{Eckmann1944}. Truncated plaquette bases of this kind are also the starting point
+of current proposals for quantum simulation \cite{CBB2025,Balaji2026}.
+
+\subsection{What is not claimed}
+
+Every result is a statement about an effective operator of degenerate perturbation
+theory on a finite-dimensional shell at fixed lattice spacing and finite volume.
+Convergence of the expansion is not addressed beyond the isolation of the shell
+(Proposition~\ref{prop:isolation}), and nothing here bears on the continuum limit: along
+an asymptotically free trajectory the coupling $u$ of \eqref{eq:H} tends to infinity,
+outside any strong-coupling regime.
+
+\section{Setting}\label{sec:setting}
+
+\subsection{Hamiltonian and normalisation}
+
+Let $\Lambda=(\Z/L\Z)^3$ with $L\ge3$, with oriented links $\ell=(x,\mu)$ carrying
+$U_\ell\in\SU(N)$, $N\ge3$, and Hilbert space $\bigotimes_\ell L^2(\SU(N),dU_\ell)$ with
+Haar measure. Write $C_\ell$ for the quadratic Casimir operator of link $\ell$,
+normalised so that on the fundamental representation $F$
+\begin{equation}\label{eq:CF}
+\begin{aligned}
+  C_2(F)&=\CF=\frac{N^2-1}{2N}, & C_2(\Adj)&=N,\\
+  C_2(\Lambda^2F)&=\frac{(N+1)(N-2)}{N}, & C_2(\Sym^2F)&=\frac{(N-1)(N+2)}{N}.
+\end{aligned}
+\end{equation}
+We study
+\begin{equation}\label{eq:H}
+  H=H_E-u\,W,\qquad H_E=\frac12\sum_\ell C_\ell,\qquad
+  W=\sum_{p}\bigl(\Tr U_p+\Tr U_p\dg\bigr),
+\end{equation}
+where the sum runs over unoriented plaquettes and $U_p$ is the ordered product of the four
+link variables around $p$. If the Kogut--Susskind Hamiltonian is written
+$aH_{\mathrm{KS}}=\tfrac{g^2}{2}\sum_\ell C_\ell-\tfrac{1}{g^2}W$, then $H=aH_{\mathrm{KS}}/g^2$
+and $u=g^{-4}$. Physical states are gauge invariant. Charge conjugation
+$\mathcal C:U_\ell\mapsto U_\ell^{*}$ commutes with $H$, as do lattice translations, the
+cubic group, and the centre symmetry that multiplies all links crossing a fixed plane by
+an element of $\Z_N$.
+
+\subsection{The charge-odd shell}
+
+At $u=0$ the ground state is the constant function $|0\rangle$, with $H_E|0\rangle=0$. For
+an oriented plaquette $p$ put
+\begin{equation}\label{eq:shell}
+  |p\rangle=\frac{1}{\sqrt2}\bigl(\Tr U_p-\Tr U_p\dg\bigr)|0\rangle .
+\end{equation}
+These states are orthonormal by character orthogonality, have $H_E|p\rangle=2\CF|p\rangle$
+(four fundamental links at energy $\CF/2$ each), are odd under $\mathcal C$, and satisfy
+$|{-p}\rangle=-|p\rangle$, where $-p$ is $p$ with reversed orientation. The last property is
+the point of the construction: \emph{the map $p\mapsto|p\rangle$ identifies the span
+$\mathcal P$ of these states with the space $C_2$ of cellular $2$-chains}, of dimension
+$3L^3$.
+
+\begin{proposition}[isolation]\label{prop:isolation}
+In the gauge-invariant, $\mathcal C$-odd sector of trivial centre charge, the spectrum of
+$H_E$ in $[0,2\CF+\gamma_N)$ is $\{2\CF\}$, with eigenspace $\mathcal P$, where
+$\gamma_N=\CF$ for $N=3$ and $N\ge5$, and $\gamma_4=5/4$.
+\end{proposition}
+
+\begin{proof}
+Eigenstates of $H_E$ are labelled by an irreducible representation on each link, and the
+energy is $\tfrac12\sum_\ell C_2(\rho_\ell)$; the smallest nonzero Casimir is $\CF$. Gauge
+invariance forbids a vertex with exactly one excited link, so the excited links form a
+subgraph with all degrees at least two. In the cubic lattice with $L\ge3$ such a subgraph
+with trivial centre charge has at least four links, and with exactly four links it is a
+plaquette; at a two-valent vertex the two representations must be conjugate along the
+path, so a plaquette state is $\chi_\rho(U_p)|0\rangle$ with energy $2C_2(\rho)$. The
+values $\rho=F,\bar F$ give the shell and its $\mathcal C$-even partner. The remaining
+plaquette states have $2C_2(\rho)-2\CF\ge 2C_2(\Lambda^2F)-2\CF=(N-3)(N+1)/N$ for $N\ge4$
+and $\ge 2C_2(\Adj)-2\CF=10/3$ for $N=3$, where $\Lambda^2F=\bar F$. There is no admissible
+subgraph with five links; with six or more links the energy is at least $3\CF$. A
+Polyakov line in a representation of zero $N$-ality has energy at least $3N/2>3\CF$.
+Comparing $(N-3)(N+1)/N$ with $\CF$ gives $\gamma_N$.
+\end{proof}
+
+By Proposition~\ref{prop:isolation} and the boundedness of $W$ at finite volume, analytic
+perturbation theory applies to the shell. We write $P$ for the projector onto $\mathcal P$,
+$Q=1-P$, $\mathcal R=Q(2\CF-H_E)^{-1}Q$, and use the Hermitian (des Cloizeaux) effective
+Hamiltonian \cite{Bloch1958,desCloizeaux1960}
+\begin{gather*}
+  H_{\mathrm{eff}}=2\CF+\sum_{m\ge1}u^mH_m,\qquad H_1=-PWP,\qquad H_2=PW\mathcal RWP,\\
+  H_3=-\bigl(PW\mathcal RW\mathcal RWP-\tfrac12\{PW\mathcal R^2WP,\,PWP\}\bigr),
+\end{gather*}
+with energies measured from the perturbed vacuum energy. By translation and cubic
+symmetry the diagonal of every $H_m$ is a scalar.
+
+\section{Second order: the down Laplacian}\label{sec:second}
+
+\subsection{The cell complex}
+
+Let $C_0,C_1,C_2,C_3$ be the real vector spaces on vertices, links, plaquettes and cubes,
+with cell bases orthonormal, and boundary maps
+$\partial_2[x;\mu\nu]=[x;\mu]+[x+\hat\mu;\nu]-[x+\hat\nu;\mu]-[x;\nu]$ and
+$\partial_3[x]=\sum_{\mu}(-1)^{\mu-1}\bigl([x+\hat\mu;\mu^c]-[x;\mu^c]\bigr)$, where
+$\mu^c$ is the complementary pair in increasing order. Then $\partial_2\partial_3=0$. On
+$C_2$ define
+\begin{equation}\label{eq:laplacians}
+  \Ldn=\partial_2\dg\partial_2,\qquad \Lup=\partial_3\partial_3\dg,\qquad \Ldn\Lup=\Lup\Ldn=0 .
+\end{equation}
+The matrix element $(\Ldn)_{pp'}=\sum_\ell[p:\ell][p':\ell]$ is $4$ for $p=p'$, and for
+$p\ne p'$ sharing a link it is $+1$ if the two plaquettes induce the same orientation on
+that link and $-1$ otherwise. We write $\Ssq=\Ldn-4I$ for the signed shared-link adjacency.
+
+\subsection{The hopping amplitude}
+
+\begin{lemma}[shared-link channels]\label{lem:channels}
+Let $p\ne p'$ share the link $\ell$, and let $\chi,\chi'\in\{\chi_F,\chi_{\bar F}\}$. The
+product $\chi(U_p)\chi'(U_{p'})|0\rangle$ has unit norm. It decomposes according to the
+irreducible representation $\rho$ carried by $\ell$, with $\rho\in\{\mathbf 1,\Adj\}$ if the
+two fluxes traverse $\ell$ in opposite directions and $\rho\in\{\Lambda^2F,\Sym^2F\}$ if in
+the same direction. The component in channel $\rho$ has squared norm $d_\rho/N^2$,
+$d_\rho=\dim\rho$, and is an eigenstate of $H_E$ with energy $3\CF+\tfrac12C_2(\rho)$.
+\end{lemma}
+
+\begin{proof}
+Write $U_p=U_\ell A$ and $U_{p'}=U_\ell^{\pm1}B$, where $A$ and $B$ are products of the three
+private links of each plaquette and are independent Haar variables. Integrating over $A$
+and $B$ with $\int A_{ij}\overline{A_{kl}}\,dA=\delta_{ik}\delta_{jl}/N$ gives, for the
+projector $\Pi_\rho$ acting on the two copies of the representation space of $\ell$,
+$\|\Pi_\rho\chi\chi'\|^2=N^{-2}\Tr\Pi_\rho=d_\rho/N^2$; summing over $\rho$ gives $1$. The six
+private links are fundamental and $\ell$ carries $\rho$.
+\end{proof}
+
+\begin{theorem}[second order]\label{thm:second}
+For every $N\ge3$,
+\begin{equation}\label{eq:H2}
+  H_2=c_2(N)\,I+t_N\,\Ldn,\qquad
+  t_N=\frac{2N(N^2-4)}{(N^2-1)(2N^2-1)(4N^2-9)}>0 ,
+\end{equation}
+where $c_2(N)$ is a scalar.
+\end{theorem}
+
+\begin{proof}
+Let $p\ne p'$. A second-order path from $|p\rangle$ to $|p'\rangle$ either annihilates $p$
+and then creates $p'$, through the vacuum, or creates $p'$ and then annihilates $p$. For
+flux labels $\chi$ on $p$ and $\chi'$ on $p'$, the vacuum route contributes $1/(2\CF)$
+independently of $(\chi,\chi')$. In the $\mathcal C$-odd combination \eqref{eq:shell} the
+amplitude is
+$\tfrac12[(F\!\to\!F')+(\bar F\!\to\!\bar F')-(F\!\to\!\bar F')-(\bar F\!\to\!F')]$, so every
+contribution independent of $(\chi,\chi')$ cancels. If $p$ and $p'$ share no link, the
+intermediate state of the second route is a product state of energy $4\CF$ and its
+contribution is again independent of the labels; hence $H_2$ connects only plaquettes that
+share a link.
+
+Let $p,p'$ share $\ell$. By Lemma~\ref{lem:channels} the second route contributes
+$\sum_\rho w_\rho$ over the two channels allowed by the relative direction, with
+\begin{equation}\label{eq:weights}
+  w_\rho=\frac{d_\rho/N^2}{2\CF-\bigl(3\CF+\tfrac12C_2(\rho)\bigr)}
+        =-\frac{d_\rho/N^2}{\CF+\tfrac12C_2(\rho)} .
+\end{equation}
+With \eqref{eq:CF},
+\begin{align*}
+  w_{\mathbf 1}&=-\frac{2}{N(N^2-1)}, & w_{\Adj}&=-\frac{2(N^2-1)}{N(2N^2-1)},\\
+  w_{\Lambda^2}&=-\frac{N-1}{(N+1)(2N-3)}, & w_{\Sym^2}&=-\frac{N+1}{(N-1)(2N+3)} ,
+\end{align*}
+and the two sums are
+\begin{equation}\label{eq:sums}
+  \Sigma^{\mathrm o}_N=w_{\mathbf 1}+w_{\Adj}=-\frac{2N^3}{(N^2-1)(2N^2-1)},\qquad
+  \Sigma^{\mathrm s}_N=w_{\Lambda^2}+w_{\Sym^2}=-\frac{4N(N^2-2)}{(N^2-1)(4N^2-9)} .
+\end{equation}
+Suppose $p$ and $p'$ induce the same orientation on $\ell$. Then $(F\to F')$ and
+$(\bar F\to\bar F')$ run through the same-direction channels and the two mixed amplitudes
+through the opposite-direction channels, so the $\mathcal C$-odd amplitude is
+$\Sigma^{\mathrm s}_N-\Sigma^{\mathrm o}_N$. If the induced orientations are opposite the
+roles are exchanged and the amplitude is $\Sigma^{\mathrm o}_N-\Sigma^{\mathrm s}_N$. In
+both cases it equals $t_N[p:\ell][p':\ell]$ with
+\[
+  t_N=\Sigma^{\mathrm s}_N-\Sigma^{\mathrm o}_N
+     =\frac{2N}{N^2-1}\cdot\frac{N^2(4N^2-9)-2(N^2-2)(2N^2-1)}{(2N^2-1)(4N^2-9)}
+     =\frac{2N(N^2-4)}{(N^2-1)(2N^2-1)(4N^2-9)} .
+\]
+Hence the off-diagonal part of $H_2$ is $t_N\Ssq$; the diagonal is a scalar, and absorbing
+$-4t_N$ into it gives \eqref{eq:H2}.
+\end{proof}
+
+\begin{remark}\label{rem:tN}
+(i) $t_3=5/612$. (ii) The formula vanishes at $N=2$, where $\chi_F$ is real and the shell
+\eqref{eq:shell} is empty. (iii) As $N\to\infty$,
+$t_N=\tfrac{1}{4}N^{-3}-\tfrac{1}{16}N^{-5}-\tfrac{77}{64}N^{-7}+O(N^{-9})$, although
+$\Sigma^{\mathrm o}_N$ and $\Sigma^{\mathrm s}_N$ are each $-N^{-1}+O(N^{-3})$: one order in
+$N^{-2}$ cancels between the two orientation classes. This is the first instance of the
+pattern discussed in Section~\ref{sec:fermion}.
+\end{remark}
+
+\subsection{Bloch form, flat band, and multiplicity}
+
+Order the face orbitals as $(12),(13),(23)$ and the link orbitals as $1,2,3$, and put
+$d_j=e^{ik_j}-1$, $a_j=|d_j|^2=4\sin^2(k_j/2)$, $q=a_1+a_2+a_3$. The coboundary
+$\partial_2\dg$ has Bloch matrix
+\begin{equation}\label{eq:delta}
+  \delta(k)=\begin{pmatrix} d_2&-d_1&0\\ d_3&0&-d_1\\ 0&d_3&-d_2\end{pmatrix},
+  \qquad w(k)=\bigl(\bar d_3,\,-\bar d_2,\,\bar d_1\bigr)^{T},
+\end{equation}
+and $w(k)$ is the Bloch matrix of $\partial_3$.
+
+\begin{proposition}\label{prop:bloch}
+$\Ldn(k)=\delta(k)\delta(k)\dg=q(k)I_3-w(k)w(k)\dg$ and $\Lup(k)=w(k)w(k)\dg$, so that
+$\Ldn(k)+\Lup(k)=q(k)I_3$. For $q(k)>0$ the spectrum of $\Ldn(k)$ is $\{0,q,q\}$, with
+$\ker\Ldn(k)=\C\,w(k)$.
+\end{proposition}
+
+\begin{proof}
+The diagonal entries of $\delta\delta\dg$ are $a_1+a_2$, $a_1+a_3$, $a_2+a_3$, that is
+$q-|w_i|^2$. The off-diagonal entries are $d_2\bar d_3$, $-d_1\bar d_3$ and $d_1\bar d_2$,
+which equal $-w_1\bar w_2$, $-w_1\bar w_3$ and $-w_2\bar w_3$. Since $w\dg w=q$, the vector
+$w$ is a null vector and $w^\perp$ is the $q$-eigenspace.
+\end{proof}
+
+\begin{theorem}[multiplicity]\label{thm:carrier}
+$\dim\ker\partial_2=(L^3-1)+3=L^3+2$. The kernel is the orthogonal sum of $\im\partial_3$,
+spanned by the boundaries of the $L^3$ elementary cubes subject to the single relation
+$\sum_x\partial_3[x]=0$, and the three-dimensional space of harmonic $2$-chains, spanned
+modulo boundaries by the wrapping sheets $S_\mu=\sum_{x_\mu=0}[x;\mu^c]$.
+\end{theorem}
+
+\begin{proof}
+By the Hodge decomposition of a finite complex \cite{Eckmann1944},
+$\ker\partial_2=\im\partial_3\oplus\mathcal H_2$ with $\mathcal H_2\cong H_2(T^3;\R)$, of
+dimension $b_2=3$. Since there are no $4$-cells, $\dim\ker\partial_3=b_3=1$, so
+$\dim\im\partial_3=L^3-1$; the kernel of $\partial_3$ is spanned by the sum of all cubes,
+because each plaquette lies in two cubes with opposite induced orientation. Each $S_\mu$ is
+a cycle and the three are independent in homology. As a check, the Bloch fibres contribute
+one null vector for each of the $L^3-1$ momenta with $q>0$ and three at $\Gamma$, where
+$\Ldn(0)=0$.
+\end{proof}
+
+Each cube boundary is supported on six plaquettes and is annihilated by $\Ldn$: it is a
+compact localised state. Figure~\ref{fig:bands} shows the spectrum.
+
+\begin{proposition}[singular touching]\label{prop:singular}
+For a unit vector $\hat n$, $\lim_{t\to0^+}w(t\hat n)/\sqrt{q(t\hat n)}=-i\,(n_3,-n_2,n_1)^T$.
+The normalised Bloch vector of the flat band therefore has no limit at $\Gamma$: the
+touching is singular in the sense of \cite{RhimYang2019}, which is the Bloch-space form of
+the fact that the compact localised states do not span $\ker\partial_2$.
+\end{proposition}
+
+\begin{proof}
+$\bar d_j=-ik_j+O(k^2)$ and $q=|k|^2+O(k^4)$.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \draw[->] (0,0) -- (10.4,0);
+  \draw[->] (0,0) -- (0,5.4) node[above] {eigenvalue of $\Ldn(k)$};
+  \foreach \x/\lab in {0/$\Gamma$,2.5/$X$,5/$M$,7.5/$R$,10/$\Gamma$}
+    {\draw (\x,0.08) -- (\x,-0.08) node[below] {\lab}; \draw[gray!40,dashed] (\x,0) -- (\x,5);}
+  \foreach \y/\lab in {1.6667/4,3.3333/8,5/12} {\draw (0.08,\y) -- (-0.08,\y) node[left] {\lab};}
+  \draw[very thick, red!75!black] (0,0) -- (10,0);
+  \draw[domain=0:2.5, smooth, variable=\x, very thick, blue!75!black]
+    plot ({\x},{1.6667*(sin(\x*36))^2});
+  \draw[domain=2.5:5, smooth, variable=\x, very thick, blue!75!black]
+    plot ({\x},{1.6667*(1+(sin((\x-2.5)*36))^2)});
+  \draw[domain=5:7.5, smooth, variable=\x, very thick, blue!75!black]
+    plot ({\x},{1.6667*(2+(sin((\x-5)*36))^2)});
+  \draw[domain=7.5:10, smooth, variable=\x, very thick, blue!75!black]
+    plot ({\x},{5*(cos((\x-7.5)*36))^2});
+  \node[blue!75!black] at (3.7,4.3) {$q(k)$, doubly degenerate};
+  \node[red!75!black, above] at (5,0.05) {flat band $\ker\partial_2$};
+\end{tikzpicture}
+\caption{Spectrum of $\Ldn(k)$ along $\Gamma=(0,0,0)$, $X=(\pi,0,0)$, $M=(\pi,\pi,0)$,
+$R=(\pi,\pi,\pi)$. By Theorem~\ref{thm:second} the second-order bands are
+$c_2u^2+t_Nu^2\{0,q,q\}$.}\label{fig:bands}
+\end{figure}
+
+\section{Odd orders: the centre-parity theorem}\label{sec:odd}
+
+A matrix element of $H_m$ between shell states is a sum of products of factors
+\[
+  \langle a|\,W\mathcal R^{j_1}W\cdots\mathcal R^{j_{n-1}}W\,|b\rangle ,\qquad a,b\in\mathcal P,
+\]
+whose numbers $n$ of insertions of $W$ add up to $m$. Expanding $W$ and the two shell states in traces, a factor
+with $n$ insertions is a sum of Haar integrals of products of $n+2$ \emph{face words}
+$\Tr U_p^{\pm1}$, weighted by resolvent denominators.
+
+\begin{theorem}[centre parity]\label{thm:parity}
+Consider the expansion on $\Z^3$, or on the torus with $L$ even, or on any torus for
+$m+2<L$.
+\begin{enumerate}\itemsep2pt
+\item If $N$ is even, $H_m=0$ for every odd $m$.
+\item If $N$ is odd, $H_m=0$ for every odd $m<N-2$, and $H_{N-2}$ is diagonal in the
+  plaquette label, with
+  \begin{equation}\label{eq:vertex}
+    \bigl\langle\chi_{\bar F}(U_p)\bigr|H_{N-2}\bigl|\chi_F(U_p)\bigr\rangle
+      =-\Bigl(\frac{N}{N+1}\Bigr)^{N-3}\frac{1}{\bigl((N-3)!\bigr)^2} .
+  \end{equation}
+  On the $\mathcal C$-odd shell $H_{N-2}=+\bigl(\tfrac{N}{N+1}\bigr)^{N-3}((N-3)!)^{-2}\,I$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Invariance of Haar measure under $U_\ell\mapsto zU_\ell$, $z\in\Z_N$, shows that an integral
+of face words vanishes unless the net flux $f_\ell$ (forward minus backward traversals) is
+$0$ modulo $N$ on every link. Let $T$ be the set of $x$-links at even $y$, $y$-links at
+even $z$ and $z$-links at even $x$. Every plaquette meets $T$ in an odd number of links: an
+$xy$-plaquette contains two $x$-links at consecutive values of $y$, exactly one of which is
+in $T$, and two $y$-links at the same $z$; the other planes are alike. If $n_\ell$ is the
+total number of traversals of $\ell$, then $n_\ell\equiv f_\ell$ modulo $2$, and
+\[
+  \#\{\text{face words}\}\;\equiv\;\sum_{\ell\in T}n_\ell\;\equiv\;\sum_{\ell\in T}f_\ell
+  \pmod 2 .
+\]
+(1) If $N$ is even every $f_\ell$ is even, so a nonvanishing factor has an even number
+$n+2$ of face words. If $m$ is odd, every term of $H_m$ contains a factor with $n$ odd.
+
+(2) Let $N$ be odd and consider a nonvanishing factor with $n$ odd. Some $\ell\in T$ has
+$f_\ell$ odd, hence $f_\ell\ne0$, hence $|f_\ell|\ge N$, so $n+2\ge N$. Thus for $m<N-2$
+every term of $H_m$ contains a vanishing factor. For $m=N-2$ the only possibility is a
+single factor with $n=N-2$, and its $N$ face words all traverse $\ell$ in the same
+direction. Two distinct plaquettes share at most one link, so any other link of a plaquette
+occurring among the words is traversed only by the words of that plaquette, whose number
+must be $0$ modulo $N$ and is at most $N$. Hence all $N$ words are the same oriented
+plaquette $p$, and the element is
+$\langle\chi_{\bar F}(U_p)|(-W)\mathcal R(-W)\cdots\mathcal R(-W)|\chi_F(U_p)\rangle$ with
+$N-2$ insertions of $\chi_F(U_p)$. One-plaquette states are characters, multiplication by
+$\chi_F$ adds a box, and the only chain of diagrams from $F$ to the column
+$\bar F=\Lambda^{N-1}F$ is $F\to\Lambda^2F\to\cdots\to\Lambda^{N-1}F$, each step with
+multiplicity one. The energy of $\chi_{\Lambda^k}(U_p)|0\rangle$ is
+$2C_2(\Lambda^kF)=k(N-k)(N+1)/N$, so
+$E_1-E_k=-(k-1)(N-k-1)(N+1)/N$ and
+\[
+  (-1)^{N-2}\prod_{k=2}^{N-2}\frac{1}{E_1-E_k}
+  =-\Bigl(\frac{N}{N+1}\Bigr)^{N-3}\prod_{k=2}^{N-2}\frac{1}{(k-1)(N-k-1)}
+  =-\Bigl(\frac{N}{N+1}\Bigr)^{N-3}\frac{1}{((N-3)!)^2} .
+\]
+The $\mathcal C$-odd diagonal element of an operator exchanging $\chi_F$ and $\chi_{\bar F}$
+with amplitude $v$ is $-v$.
+\end{proof}
+
+The vertex is $-1$ at $N=3$, which is the first-order term $H_1=+I$ on the shell, and
+$-25/144$ at $N=5$. Odd orders are therefore not the odd members of a series uniform in
+$N$: they are determinant effects, present only when $N$ face words can close through
+$\varepsilon$-tensors.
+
+\begin{corollary}[flatness through third order]\label{cor:flat3}
+For every $N\ge4$, $H_1$ and $H_3$ are scalars on the shell ($H_1=0$; $H_3=0$ except for
+$N=5$, where it is $\tfrac{25}{144}I$). Hence through third order the bands are those of
+Figure~\ref{fig:bands} and $\ker\partial_2$ is exactly flat.
+\end{corollary}
+
+\begin{result}[$\SU(3)$, third order]\label{res:third}
+For $N=3$, exact evaluation of $H_3$ gives
+\begin{equation}\label{eq:su3}
+  H_{\mathrm{eff}}=E_{\mathrm{flat}}(u)\,I+\Bigl(\frac{5}{612}u^2+\frac{1975}{124848}u^3\Bigr)\Ldn+O(u^4),
+  \qquad
+  E_{\mathrm{flat}}=\frac83+u+\frac{11}{306}u^2-\frac{109151}{249696}u^3 ,
+\end{equation}
+so the band is flat through third order for $\SU(3)$ as well. The third-order operator was
+evaluated with two independent implementations, and its one-plaquette contributions with a
+third, character-based computation; the $\Gamma$-point coefficients agree with the series
+of \cite{Hamer1989}.
+\end{result}
+
+\section{Fourth order}\label{sec:fourth}
+
+\subsection{Assumptions}
+
+The fourth-order statements are exact rational computations. They rest on the following,
+which we state once.
+
+\begin{assumption}\label{ass:four}
+\begin{enumerate}\itemsep2pt
+\item[(A1)] Since $PWP=0$ for $N\ge4$, the Hermitian fourth-order operator is
+  $H_4=PW\mathcal RW\mathcal RW\mathcal RWP-\tfrac12\{PW\mathcal R^2WP,PW\mathcal RWP\}$.
+  For $N=3$ the terms containing $PWP$ are included.
+\item[(A2)] On the words reached at fourth order, the eigenspace of $H_E$ at energy $2\CF$
+  is exactly $\mathcal P$. This was verified on all $224$ components encountered; it is not
+  derived.
+\item[(A3)] The connected-cluster decomposition is exhausted by the list: pairs, two-hop
+  chains, fans, corners, and the two cube completions. This rests on a counting argument.
+  The pair cluster is not computed over $\Q(N)$; its cancellation from the off-axis
+  coefficient rests on a parity argument that we have not formalised.
+\item[(A4)] For the closed forms in $N$, resolvents are taken at generic rank. The
+  specialisation to integer $N$ is justified by argument for $N\ge5$
+  (Proposition~\ref{prop:faithful}); at $N=3$ and $N=4$ the closed forms are regular and
+  agree with direct computation at that rank, as a checked fact.
+\end{enumerate}
+\end{assumption}
+
+All all-rank computations were performed with one implementation, a Wilson-loop calculus
+over $\Q(N)$ with Weingarten functions as symbolic Gram inverses; at $N=3$ the central
+values were confirmed by two further independent implementations. An independent
+recomputation of the corner cumulant at some $N\ge5$ is the most useful outstanding check.
+
+\subsection{The kernel is a Hodge polynomial plus one operator}
+
+Let $R$ be the cross-plane part of $\Ssq$: on a Bloch fibre, $R_{ij}=-w_i\bar w_j$ for
+$i\ne j$ and $R_{ii}=0$.
+
+\begin{result}[Hodge form]\label{res:hodge}
+For $N=3$, on all $189$ translation classes of matrix elements of $H_4$,
+\begin{equation}\label{eq:hodge}
+  H_4=-\tilde\nu\,(\Lup-2)+\omega\,\Ssq^2-\tilde\pi\,\Ssq+\tilde\sigma\,I-2C_{\shp}\,R ,
+  \qquad \tilde\nu=-\frac{5}{48},
+\end{equation}
+exactly, where $\omega$ is the two-hop weight of Section~\ref{sec:closed} and
+$\tilde\pi,\tilde\sigma$ are rational numbers. In particular the two-hop sector enters as
+the \emph{square} of the second-order operator, and $R$ is the only operator outside the
+algebra generated by $\Ldn$ and $\Lup$. The on-site amplitude $\tilde\sigma$ has not been
+checked independently; it enters only the constant $\epsilon_\Gamma$ below.
+\end{result}
+
+\begin{proposition}[the complement of the flat band]\label{prop:feshbach}
+On a fibre with $q>0$ let $\psi=w$. Then $\C^3=\ker\Ldn\oplus\ker\Lup$, the projector onto
+$\psi^\perp$ is $Q_\psi=\Ldn/q$, and $Q_\psi\Ldn\psi=Q_\psi\Lup\psi=0$. Thus no polynomial
+in $\Ldn$ and $\Lup$ couples the flat band to the dispersive doublet; in \eqref{eq:hodge}
+only $R$ does.
+\end{proposition}
+
+\begin{proof}
+Proposition~\ref{prop:bloch} gives $\Ldn\psi=0$, $\Lup\psi=q\psi$, and $\Lup=0$ on $\psi^\perp$.
+\end{proof}
+
+The most general energy of the flat band allowed by cubic symmetry at this order is, with
+$e_2=\sum_{i<j}a_ia_j$ and $e_3=a_1a_2a_3$,
+\begin{equation}\label{eq:ansatz}
+  q\,\varepsilon_4(k)=\epsilon_\Gamma\,q+A_{\shp}\,q^2+4C_{\shp}\,e_2+B_{\shp}\,q\,e_2+D_{\shp}\,e_3,
+  \qquad \varepsilon_4=\frac{\langle\psi,H_4\psi\rangle}{\langle\psi,\psi\rangle} .
+\end{equation}
+
+\begin{theorem}[collapse of the cubic tier]\label{thm:collapse}
+Let $\sigma(X)=\langle\psi,X\psi\rangle$. Then
+\begin{equation}\label{eq:symbols}
+  \sigma(I)=q,\quad \sigma(\Ssq)=-4q,\quad \sigma(\Ssq^2)=16q,\quad \sigma(\Lup)=q^2,\quad
+  \sigma(R)=-2e_2 .
+\end{equation}
+Consequently any operator of the form \eqref{eq:hodge} has
+\begin{equation}\label{eq:BD}
+  B_{\shp}=D_{\shp}=0,\qquad A_{\shp}=-\tilde\nu,\qquad
+  \epsilon_\Gamma=\tilde\sigma+2\tilde\nu+16\omega+4\tilde\pi .
+\end{equation}
+Moreover $\sigma(R^2)=q\,e_2+3e_3$ and $\sigma(\Lup R)=-2q\,e_2$.
+\end{theorem}
+
+\begin{proof}
+The first four symbols follow from $\Ldn\psi=0$ and $\Lup\psi=q\psi$. For $R$,
+$\sigma(R)=-\sum_{i\ne j}|w_i|^2|w_j|^2=-2e_2$. Next $(R\psi)_i=-w_i(q-a_i)$, so
+$\sigma(R^2)=\sum_ia_i\sum_{j\ne i}a_j(q-a_j)=2qe_2-(qe_2-3e_3)$, and
+$\sigma(\Lup R)=q\,\sigma(R)$.
+\end{proof}
+
+The last two identities delimit the mechanism. The vanishing of $B_{\shp}$ and $D_{\shp}$
+is not a consequence of the number of insertions of $R$: the single-$R$ operator $\Lup R$
+would populate $B_{\shp}$. It is a consequence of the fact that $\Lup R$ does not occur at
+fourth order. If $R^2$ occurs at sixth order, it contributes to the cubic tier in the fixed
+ratio $D_{\shp}=3B_{\shp}$.
+
+\subsection{Closed forms over \texorpdfstring{$\Q(N)$}{Q(N)}}\label{sec:closed}
+
+\begin{result}[cumulants]\label{res:closed}
+Computed over $\Q(N)$, every connected fourth-order cumulant in both $\mathcal C$ sectors is
+a single rational function of $N$ (the pair cluster excepted, see
+Theorem~\ref{thm:beta}). The two-hop weight, the single-contact dressing and the corner
+dressing are
+\begin{align}
+  \omega_N&=\frac{N^3(N^2-4)^2\,p_{14}(N)}
+      {2(N^2-1)^3(4N^2-9)^3(9N^2-16)(2N^2-3)(2N^2-1)^3(3N^2-2)\,r_2(N)},\label{eq:omega}\\
+  d^{\,\mathrm s}_N&=\frac{2N^3(N^2-4)(10N^2-13)}{(N^2-1)^3(4N^2-9)^2(2N^2-1)^2},\label{eq:ds}\\
+  d^{\,\mathrm c}_N&=\frac{16N^3(N^2-4)\,p_{18}(N)}
+      {(N^2-1)^3(4N^2-9)^3(4N^2-1)(9N^2-25)(2N^2-1)^3(3N^2-1)(4N^2-5)\,r_4(N)},\label{eq:dc}
+\end{align}
+with $r_2(N)=(4N^2-N-4)(4N^2+N-4)$, $r_4(N)=(4N^2-2N-5)(4N^2+2N-5)$ and $p_{14},p_{18}$ as in
+Appendix~\ref{app:poly}; the cube completions between opposite and between adjacent faces
+are
+\begin{equation}\label{eq:cubes}
+  \kappa^{\mathrm{opp}}_N=-\frac{160}{N(N^2-1)^3},\qquad
+  \kappa^{\mathrm{adj}}_N=-\frac{106}{N(N^2-1)^3} .
+\end{equation}
+Each form specialises to the value computed directly at rank $N$ for every
+$N=3,\dots,70$. Every denominator factor is the energy denominator of an identified
+intermediate state; all $21{,}556$ resolvent eigencomponents were verified to be exact
+eigenvectors of every single-link Casimir over $\Q(N)$.
+\end{result}
+
+\begin{proposition}[specialisation]\label{prop:faithful}
+The symbolic and fixed-rank computations can differ only through rank-dependent selection
+rules, the Weingarten function, and the spectral decomposition. No word at fourth order
+carries flux of magnitude at least $5$ on every excited link, and every Haar integral
+involves at most three pairs of matrix elements per link; so for $N\ge5$ the selection rules
+and the Weingarten inverse are the specialisations of the symbolic ones. The resolvent
+denominators have exactly one integer root with $N\ge4$: at $N=4$, where the state with
+three fundamental fluxes on one plaquette becomes $\bar F$ and is degenerate with the
+shell. Hence for $N\ge5$ the closed forms are the fixed-rank values by argument.
+\end{proposition}
+
+The adjacent-face cube completion deserves a remark because it is the easiest term to get
+wrong. The four remaining faces of the cube can be inserted in $4!=24$ orders. In units of
+$1/1536$ at $N=3$, the orders have weights $-8$ (eight orders), $-4$ (six), $-2$ (eight)
+and $-1$ (two), with total $-106/1536=-53/768$, in agreement with \eqref{eq:cubes}. An
+enumeration that retains only some of the orders produces a wrong off-axis coefficient
+while leaving all axial and $\Gamma$-point quantities unchanged, because $e_2=0$ on the
+axes; off-axis checks are therefore essential. (An earlier enumeration in this project
+held $8$ of the $24$ orders and gave $C_{\shp}$ too negative by $25/1024$.)
+
+Put $\beta_N=8A_{\shp}+16C_{\shp}$. In the $\mathcal C$-odd sector the computed coplanar
+dressings are the exact negatives of the perpendicular ones, the fan clusters cancel, and
+under (A3) the assembly of the off-axis coefficient from the cumulants of Computed
+result~\ref{res:closed} reduces to the left side of \eqref{eq:beta}.
+
+\begin{theorem}[$\beta_N$ from three cumulants]\label{thm:beta}
+As rational functions of $N$,
+\begin{equation}\label{eq:beta}
+  -16\,\omega_N+32\,d^{\,\mathrm s}_N-16\,d^{\,\mathrm c}_N+\frac{848}{N(N^2-1)^3}
+        =\frac{P_{17}(N^2)}{N\,R_{20}(N^2)} ,
+\end{equation}
+with $P_{17}$ and $R_{20}$ as in Appendix~\ref{app:poly}; under (A3) this is $\beta_N$.
+\end{theorem}
+
+\begin{proof}
+After clearing denominators this is a polynomial identity in $N$. It has been checked in
+the Lean~4 proof assistant (by the \texttt{ring} tactic) and, independently, in exact
+arithmetic at the integers $N=3,\dots,200$, more points than the degree of the cleared
+identity.
+\end{proof}
+
+For $N=3$,
+\[
+  \omega_3=\frac{360421351}{40327601932800},\qquad
+  C_{\shp}=-\frac{13035490122347}{550663802582400},\qquad
+  \beta_3=\frac{15644916262153}{34416487661400},
+\]
+that is, $C_{\shp}=-0.0236723\ldots$ and $\beta_3=0.4545762\ldots$.
+
+\subsection{Dispersion, extrema and bandwidth}
+
+Put $X_i=1-\cos k_i=a_i/2\in[0,2]$ and
+\begin{equation}\label{eq:alpha}
+  \alpha_N=4A_{\shp}=-4\kappa^{\mathrm{opp}}_N=\frac{640}{N(N^2-1)^3} .
+\end{equation}
+By \eqref{eq:ansatz} and \eqref{eq:BD},
+\begin{equation}\label{eq:dispersion}
+  \varepsilon_4(k)-\epsilon_\Gamma=A_{\shp}\,q+\frac{4C_{\shp}\,e_2}{q}
+   =\frac{\alpha_N\sum_iX_i^2+\beta_N\sum_{i<j}X_iX_j}{2\sum_iX_i} .
+\end{equation}
+
+\begin{lemma}\label{lem:positivity}
+For every integer $N\ge3$, $\beta_N>\alpha_N>0$. As $N\to\infty$, $N^7\alpha_N\to640$ and
+$N^7\beta_N\to6170/9$.
+\end{lemma}
+
+\begin{proof}
+All real roots of $R_{20}$ are at most $25/9$, so $R_{20}(z)>0$ for $z\ge9$. The numerator
+of $N R_{20}(N^2)(\beta_N-\alpha_N)$ is $G(z)=P_{17}(z)-640R_{20}(z)/(z-1)^3$ at $z=N^2$, a
+polynomial of degree $17$ with positive leading coefficient; isolating its real roots in
+exact arithmetic shows that all are smaller than $9$. The same holds for $P_{17}$, whose
+eleven real roots lie in $(0,2.19)$. The limits are ratios of leading coefficients.
+\end{proof}
+
+\begin{theorem}[extrema]\label{thm:extrema}
+Assume the form \eqref{eq:dispersion}. For every $N\ge3$ the function
+$\varepsilon_4-\epsilon_\Gamma$ is positive for $k\ne\Gamma$, tends to $0$ as $k\to\Gamma$,
+and attains its maximum exactly at $R=(\pi,\pi,\pi)$, where it equals $\alpha_N+\beta_N$. On
+a coordinate axis it equals $\alpha_NX/2$. The fourth-order bandwidth of the flat band is
+therefore
+\[
+  \Delta_4(N)=(\alpha_N+\beta_N)\,u^4,\qquad
+  \Delta_4(3)=\frac{29985119454403}{34416487661400}\,u^4 .
+\]
+\end{theorem}
+
+\begin{proof}
+Write $f=(\alpha\sum X_i^2+\beta e)/(2s)$ with $s=\sum X_i$, $e=\sum_{i<j}X_iX_j$. With
+$t=X_2+X_3$,
+\[
+  2s^2\,\frac{\partial f}{\partial X_1}
+  =\alpha X_1^2+2\alpha X_1t+(\beta-\alpha)(X_2^2+X_3^2)+\beta X_2X_3 ,
+\]
+which by Lemma~\ref{lem:positivity} is positive on $[0,2]^3\setminus\{0\}$. So $f$ is
+strictly increasing in each variable and its maximum on the cube is attained only at
+$X=(2,2,2)$, where $f=(12\alpha+12\beta)/12$. Positivity of $f$ and its limit at the origin
+are evident.
+\end{proof}
+
+For $N=3$ the theorem rests on Computed result~\ref{res:hodge}. For $N\ge4$ the form
+\eqref{eq:dispersion} rests on (A3) and on the vanishing of $B_{\shp}$ and $D_{\shp}$,
+which has been verified by direct computation at $N=4,5,6$ and at the larger ranks
+examined.
+
+\subsection{Coupling to the dispersive doublet}
+
+\begin{theorem}[one angular invariant]\label{thm:mixing}
+Let $p=\psi/\sqrt q$ and $x_i=a_i/q$. For $H_4$ of the form \eqref{eq:hodge},
+\begin{equation}\label{eq:mixing}
+  \|Q_\psi H_4\,p\|^2=4C_{\shp}^2\,q^2\,V(x),\qquad
+  V(x)=\sum_ix_i^3-\Bigl(\sum_ix_i^2\Bigr)^2=\sum_{i<j}x_ix_j(x_i-x_j)^2\ \ge0 .
+\end{equation}
+$V$ vanishes exactly when the nonzero $x_i$ are equal: on the axes, the face diagonals and
+the body diagonals, where the flat-band vector is an exact eigenvector of $H_4$.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:feshbach}, $Q_\psi H_4p=-2C_{\shp}Q_\psi Rp$. From
+$(R\psi)_i=-w_i(q-a_i)$ and $\sigma(R)=-2e_2$,
+$(Q_\psi R\psi)_i=w_i(a_i-q+2e_2/q)=q\,w_i\bigl(x_i-\sum_jx_j^2\bigr)$, using
+$2e_2=q^2(1-\sum_jx_j^2)$. Hence
+$\|Q_\psi R\psi\|^2=q^3\sum_ix_i(x_i-\sum_jx_j^2)^2=q^3V(x)$.
+\end{proof}
+
+Since the doublet lies $t_Nu^2q$ above the flat band, second-order perturbation theory in
+this coupling contributes $-(4C_{\shp}^2/t_N)\,q\,V(x)\,u^6$ to the flat-band energy; for
+$N=3$ the coefficient is $-0.2743614\ldots$. This is one contribution to the sixth order,
+not the sixth order.
+
+\section{One plaquette as free fermions}\label{sec:fermion}
+
+\subsection{The representation}
+
+Gauge-invariant functions of a single plaquette variable are class functions. After
+multiplication by the Vandermonde determinant they become antisymmetric functions of the
+eigenvalue angles $\theta_1,\dots,\theta_N$, and characters become Slater determinants
+$|p_1,\dots,p_N\rangle$ of plane waves with momenta $p_j\in\Z+\tfrac{N-1}{2}$
+\cite{GrossWitten1980,Wadia1980,MinahanPolychronakos1993,Douglas1993}. The trivial
+representation is the Fermi sea $\{-\tfrac{N-1}{2},\dots,\tfrac{N-1}{2}\}$; a
+representation with highest weight $\lambda$ has $p_j=\lambda_j-j+\tfrac{N+1}{2}$. The
+Casimir formula reads
+\begin{equation}\label{eq:casimir}
+  2C_2(\lambda)=\sum_jp_j^2-\frac{P^2}{N}-E_{\mathrm{sea}},\qquad
+  P=\sum_jp_j,\qquad E_{\mathrm{sea}}=\frac{N(N^2-1)}{12},
+\end{equation}
+and multiplication by $\chi_F$ (respectively $\chi_{\bar F}$) raises (lowers) the momentum of
+one fermion by one. For a single plaquette, whose four links carry the same representation,
+the Hamiltonian \eqref{eq:H} becomes
+\begin{equation}\label{eq:HSU}
+  H_{\SU(N)}=H_{\U(N)}-\frac{P^2}{N},\qquad
+  H_{\U(N)}=\sum_{j=1}^N\bigl(p_j^2-2u\cos\theta_j\bigr)-E_{\mathrm{sea}} ,
+\end{equation}
+that is, $N$ free fermions in a cosine potential with the centre-of-mass kinetic energy
+removed. The doublet is $F=$ (sea with $\tfrac{N-1}{2}\to\tfrac{N+1}{2}$, $P=1$) and
+$\bar F=$ (sea with $-\tfrac{N-1}{2}\to-\tfrac{N+1}{2}$, $P=-1$). For $\SU(N)$, Slater
+determinants that differ by a common shift of all momenta are identified ($\det U=1$), and
+\eqref{eq:HSU} is invariant under the shift. The shifted copy of $\bar F$ with $P=N-1$ is
+$N-2$ steps from $F$; this is the vertex of Theorem~\ref{thm:parity}, and below order $N-2$
+the identification plays no role. Let $K=\sum_mu^mK_m$ be the
+effective Hamiltonian on the span of $F$ and $\bar F$. The splitting between the
+$\mathcal C$-odd and $\mathcal C$-even one-plaquette energies is
+\begin{equation}\label{eq:Sm}
+  S(u)=\sum_mS_mu^m,\qquad S_m=-2\,K_m[F][\bar F].
+\end{equation}
+
+\subsection{The \texorpdfstring{$\U(N)$}{U(N)} doublet does not split}
+
+\begin{theorem}\label{thm:nosplit}
+For the Hamiltonian $H_{\U(N)}$ of \eqref{eq:HSU} the expansion of $K$ is well defined
+through order $N-2$, and $K_m=\kappa_mI$ with a scalar $\kappa_m$ for every $m\le N-2$. In particular $K_m[F][\bar F]=0$ and $S_m=0$ for
+$m\le N-2$.
+\end{theorem}
+
+\begin{proof}
+$H_{\U(N)}$ is a sum of copies of the one-body operator $h=p^2-u(T+T\dg)$, where $T$ raises
+the momentum by one, so its eigenvalues on antisymmetric states are sums of $N$ distinct
+eigenvalues of $h$. At $u=0$ the levels $p^2$ of $h$ are degenerate in pairs $\{p,-p\}$, and
+$h$ commutes with the reflection $p\mapsto-p$. The effective operator of $h$ on such a pair
+is therefore of the form $\bigl(\begin{smallmatrix}a&b\\ b&a\end{smallmatrix}\bigr)$, and
+the coefficient of $u^m$ in $b$ is a sum over walks of length $m$ from $p$ to $-p$ with
+steps $\pm1$, which requires $m\ge2|p|$. Hence the two eigenvalues emanating from the pair
+satisfy $e_p^+-e_p^-=O(u^{2|p|})$.
+
+At $u=0$ the level of $F$ is fourfold degenerate: a particle--hole excitation of the sea
+costs at least $N$, with equality only when a fermion moves from $\pm\tfrac{N-1}{2}$ to
+$\pm\tfrac{N+1}{2}$ (either sign for each), so the level consists of $F$, $\bar F$ and the
+two states $D_\pm$ of total momentum $\pm N$. All four occupy every pair with
+$|p|\le\tfrac{N-3}{2}$ fully and one member each of the pairs
+$\mathsf A=\{\pm\tfrac{N-1}{2}\}$ and $\mathsf B=\{\pm\tfrac{N+1}{2}\}$. The four exact
+eigenvalues emanating from this level are therefore $E_{\mathrm{in}}(u)+e_{\mathsf A}^{\pm}
++e_{\mathsf B}^{\pm}$, where $E_{\mathrm{in}}$ is the energy of the fully occupied inner
+pairs, and they all lie within $O(u^{N-1})$ of their mean $E_0(u)$. The Hermitian effective
+Hamiltonian $K^{(4)}$ on the fourfold level is analytic in $u$ and has these eigenvalues,
+so $\|K^{(4)}-E_0(u)I\|=O(u^{N-1})$ and every Taylor coefficient of $K^{(4)}-E_0I$ of order
+at most $N-2$ vanishes. Finally, $D_\pm$ is at least $N-1$ steps from $F$ and from
+$\bar F$, so through order $N-2$ the states $D_\pm$ do not occur among the intermediate
+states of the expansion on $\{F,\bar F\}$, and $K_m$ is the corresponding block of
+$K^{(4)}_m$.
+\end{proof}
+
+Paths from $F$ to $\bar F$ do exist at low order; they cancel. At second order there are
+two, through the sea and through the adjoint (both excitations present), with denominators
+$+N$ and $-N$:
+\begin{equation}\label{eq:m2}
+  K_2^{\U(N)}[F][\bar F]=\frac1N-\frac1N=0,\qquad
+  K_2^{\SU(N)}[F][\bar F]=\frac{1}{N-\frac1N}-\frac{1}{N+\frac1N}=\frac{2N}{N^4-1},
+\end{equation}
+so that $S_2=-4N/(N^4-1)=-4N^{-3}+O(N^{-7})$ for $\SU(N)$ with $N\ge5$.
+
+\subsection{Consequences for \texorpdfstring{$\SU(N)$}{SU(N)}}
+
+By \eqref{eq:casimir} the $\SU(N)$ problem has the same states and matrix elements, and
+each denominator $E_F-E_i$ of the $\U(N)$ expansion is replaced by
+$E_F-E_i+(P_i^2-1)/N$, where $P_i$ is the momentum of the intermediate state.
+
+\begin{corollary}\label{cor:grading}
+Let $m$ be even and $N\ge m+3$.
+\begin{enumerate}\itemsep2pt
+\item $S_m^{\SU(N)}$ is exactly the difference between the expansion evaluated with
+  denominators $E_F-E_i+(P_i^2-1)/N$ and with $E_F-E_i$: the splitting is generated
+  entirely by the centre-of-mass term.
+\item Decompose $S_m$ according to the first intermediate state. Every channel is
+  $O(N^{-(m-1)})$, and the leading coefficients of the channels sum to zero.
+\item $S_m^{\SU(N)}=O(N^{-(m+1)})$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+For $N\ge m+3$ no determinant path contributes, so the $\SU(N)$ expansion is the $\U(N)$
+expansion with shifted denominators, and (1) is Theorem~\ref{thm:nosplit}. An intermediate state with $n$ boxes and antiboxes has
+$E_i-E_F=(n-1)N+O(1)$ by \eqref{eq:casimir}, and the states with $n=1$ are $F$ and
+$\bar F$ themselves, which are excluded; so each of the $m-1$ denominators of a term is of
+size $N$ and each channel is $O(N^{-(m-1)})$. The number of terms is independent of $N$
+for $N\ge m+3$. The centre-of-mass correction is a relative $O(N^{-2})$ change of each
+denominator, so the leading coefficient of each channel is its $\U(N)$ value, and these
+sum to zero by Theorem~\ref{thm:nosplit}; this proves (2) and (3).
+\end{proof}
+
+Exact computation of $S_m$ over $\Q(N)$ for even $m\le10$ shows the following. For
+$4\le m\le10$ exactly four channels contribute --- the singlet, the adjoint, and the two
+two-box states --- with leading coefficients $(-4,+2,+1,+1)\cdot2^{m/2-2}$; at $m=2$ only
+the singlet and adjoint occur, with $(-2,+2)$ as in \eqref{eq:m2}.
+Corollary~\ref{cor:grading}(2) explains why these sum to zero. The computation shows more:
+
+\begin{conjecture}[grading law]\label{conj:grading}
+For every even $m$ and $N$ large enough, $S_m=c_mN^{-(2m-1)}\bigl(1+O(N^{-2})\bigr)$.
+\end{conjecture}
+
+\noindent
+The computed values are $c_2=-4$, $c_4=-32$, $c_6=-1748/3$, $c_8=-123332/9$ and
+$c_{10}=-49593808/135$. Corollary~\ref{cor:grading} gives the exponent $m+1$, which
+coincides with $2m-1$ only at $m=2$. Writing the centre-of-mass term as $-\lambda P^2/N$,
+$S_m$ is a polynomial in $\lambda$ without constant term, and the computation shows that
+each coefficient of $\lambda^j$ with $1\le j\le m/2$ is separately $O(N^{-(2m-1)})$. What
+remains to be proved is that for $j<m/2$ the $j$-fold insertion of $(P^2-1)/N$, whose
+natural size is $N^{-(m-1)-2j}$, is in fact of this smaller order. The generic forms are
+valid only for $N\ge m+3$; at smaller rank determinant effects of the kind
+in Theorem~\ref{thm:parity} enter, and for instance the generic form of $S_4$ has a double
+pole at $N=3$.
+
+\begin{remark}[the same pattern in the band]
+The closed forms of Sections~\ref{sec:second} and~\ref{sec:fourth} show the same
+suppression for the full lattice problem: the second-order channels are $O(N^{-1})$ and
+$t_N=O(N^{-3})$; the fourth-order channel terms are $O(N^{-3})$ and
+$\alpha_N,\beta_N=O(N^{-7})$. In terms of the 't~Hooft coupling $\lambda_{\mathrm t}=g^2N$ one
+has $u=N^2/\lambda_{\mathrm t}^2$, so a coefficient of order $N^{-(4k-1)}$ at order $u^{2k}$
+gives a term $N\lambda_{\mathrm t}^{-4k}$ times a constant: every even order carries the same
+single power of $N$. Whether this persists at sixth order for the multi-plaquette clusters
+is open.
+\end{remark}
+
+\section{Verification}\label{sec:verification}
+
+The script \texttt{verify\_paper.py} distributed with this paper checks, in exact
+arithmetic: Proposition~\ref{prop:bloch}; the channel weights, \eqref{eq:sums} and $t_N$
+with its expansion; the parity of the link set $T$ and the vertex \eqref{eq:vertex} for
+$N\le11$; the symbols of Theorem~\ref{thm:collapse} and the identity \eqref{eq:mixing}; the
+value $\omega_3$, the identity \eqref{eq:beta} at $N=3,\dots,200$, and the $\SU(3)$
+numbers; Lemma~\ref{lem:positivity} by exact real-root isolation; and \eqref{eq:m2}. It does
+not recompute the cumulants of Computed results~\ref{res:third},~\ref{res:hodge}
+and~\ref{res:closed}, which require the Wilson-loop engine; that code, its pinned outputs
+and the run records are available from the author. Of the statements in this paper, only
+the polynomial identity in \eqref{eq:beta} has been formalised in a proof assistant.
+
+\section{Open problems}\label{sec:open}
+
+\begin{enumerate}\itemsep2pt
+\item Prove Conjecture~\ref{conj:grading}; a Slater--Condon evaluation in the exact
+  orbital basis of $h$ reduces the $j=1$ term to a product of two one-particle matrix
+  elements between adjacent orbitals, which obey the same power law numerically.
+\item Remove (A2) and (A3) by an independent enumeration of the fourth-order support at
+  some $N\ge5$, and recompute the corner cumulant there by a second method.
+\item Determine whether $R^2$ occurs at sixth order, that is, whether the cubic tier
+  appears with $D_{\shp}=3B_{\shp}$.
+\item Bound the orders $m\ge5$ uniformly on a fibre, which would turn the fourth-order
+  statements about the band into statements about $H_{\mathrm{eff}}$.
+\end{enumerate}
+
+\paragraph{Acknowledgements and statement on tools.}
+The computations, and substantial parts of the derivations, checking and drafting, were
+carried out with the assistance of large language models (Anthropic Claude and others)
+working under the author's direction; all exact results were verified by independent
+programs as described in Section~\ref{sec:verification}. The author is responsible for the
+content.
+
+\appendix
+\section{Polynomials}\label{app:poly}
+
+\begin{align*}
+p_{14}(N)&=16896N^{14}-131616N^{12}+451352N^{10}-882908N^{8}+1058410N^{6}\\
+  &\quad-771029N^{4}+313093N^{2}-54216,\\[3pt]
+p_{18}(N)&=2379648N^{18}-28088736N^{16}+143075272N^{14}-411323454N^{12}+732994774N^{10}\\
+  &\quad-837251963N^{8}+611821212N^{6}-275614672N^{4}+69464470N^{2}-7465875,\\[3pt]
+R_{20}(z)&=(z-1)^3(2z-3)(2z-1)^3(3z-2)(3z-1)(4z-9)^3(4z-5)(4z-1)\\
+  &\quad\times(9z-25)(9z-16)(16z^2-44z+25)(16z^2-33z+16),\\[3pt]
+P_{17}(z)&=2096187310080z^{17}-45206560309248z^{16}+448972002607104z^{15}\\
+  &\quad-2723575470882816z^{14}+11288692151812096z^{13}-33888218411529728z^{12}\\
+  &\quad+76218901019673664z^{11}-131068691814847264z^{10}+174326341061538992z^{9}\\
+  &\quad-180230597250871976z^{8}+144751635142984472z^{7}-89742150515602808z^{6}\\
+  &\quad+42388925672412712z^{5}-14916377727371552z^{4}+3768794520714128z^{3}\\
+  &\quad-641987460459360z^{2}+65414604672000z-2967321600000 .
+\end{align*}
+
+\begin{thebibliography}{99}\small
+
+\bibitem{KS1975} J.~B. Kogut and L.~Susskind,
+  \emph{Hamiltonian formulation of Wilson's lattice gauge theories},
+  Phys. Rev. D \textbf{11}, 395--408 (1975),
+  \href{https://doi.org/10.1103/PhysRevD.11.395}{doi:10.1103/PhysRevD.11.395}.
+
+\bibitem{KSS1976} J.~B. Kogut, D.~K. Sinclair and L.~Susskind,
+  \emph{A quantitative approach to low-energy quantum chromodynamics},
+  Nucl. Phys. B \textbf{114}, 199--236 (1976),
+  \href{https://doi.org/10.1016/0550-3213(76)90586-1}{doi:10.1016/0550-3213(76)90586-1}.
+
+\bibitem{Hamer1989} C.~J. Hamer,
+  \emph{Hamiltonian strong coupling expansions for glueball masses in $SU(3)$},
+  Phys. Lett. B \textbf{224}, 339--342 (1989),
+  \href{https://doi.org/10.1016/0370-2693(89)91242-2}{doi:10.1016/0370-2693(89)91242-2}.
+
+\bibitem{Munster1981} G.~M\"unster,
+  \emph{Strong coupling expansions for the mass gap in lattice gauge theories},
+  Nucl. Phys. B \textbf{190}, 439--453 (1981),
+  \href{https://doi.org/10.1016/0550-3213(81)90570-8}{doi:10.1016/0550-3213(81)90570-8}.
+
+\bibitem{Weingarten1978} D.~Weingarten,
+  \emph{Asymptotic behavior of group integrals in the limit of infinite rank},
+  J. Math. Phys. \textbf{19}, 999--1001 (1978),
+  \href{https://doi.org/10.1063/1.523807}{doi:10.1063/1.523807}.
+
+\bibitem{CollinsSniady2006} B.~Collins and P.~\'Sniady,
+  \emph{Integration with respect to the Haar measure on unitary, orthogonal and symplectic
+  group}, Commun. Math. Phys. \textbf{264}, 773--795 (2006),
+  \href{https://doi.org/10.1007/s00220-006-1554-3}{doi:10.1007/s00220-006-1554-3}.
+
+\bibitem{Bloch1958} C.~Bloch,
+  \emph{Sur la th\'eorie des perturbations des \'etats li\'es},
+  Nucl. Phys. \textbf{6}, 329--347 (1958).
+
+\bibitem{desCloizeaux1960} J.~des Cloizeaux,
+  \emph{Extension d'une formule de Lagrange \`a des probl\`emes de valeurs propres},
+  Nucl. Phys. \textbf{20}, 321--346 (1960).
+
+\bibitem{Eckmann1944} B.~Eckmann,
+  \emph{Harmonische Funktionen und Randwertaufgaben in einem Komplex},
+  Comment. Math. Helv. \textbf{17}, 240--255 (1944),
+  \href{https://doi.org/10.1007/BF02566245}{doi:10.1007/BF02566245}.
+
+\bibitem{Sutherland1986} B.~Sutherland,
+  \emph{Localization of electronic wave functions due to local topology},
+  Phys. Rev. B \textbf{34}, 5208--5211 (1986),
+  \href{https://doi.org/10.1103/PhysRevB.34.5208}{doi:10.1103/PhysRevB.34.5208}.
+
+\bibitem{Lieb1989} E.~H. Lieb,
+  \emph{Two theorems on the Hubbard model},
+  Phys. Rev. Lett. \textbf{62}, 1201--1204 (1989),
+  \href{https://doi.org/10.1103/PhysRevLett.62.1201}{doi:10.1103/PhysRevLett.62.1201}.
+
+\bibitem{Mielke1991} A.~Mielke,
+  \emph{Ferromagnetism in the Hubbard model on line graphs and further considerations},
+  J. Phys. A \textbf{24}, 3311--3321 (1991),
+  \href{https://doi.org/10.1088/0305-4470/24/14/018}{doi:10.1088/0305-4470/24/14/018}.
+
+\bibitem{Tasaki1992} H.~Tasaki,
+  \emph{Ferromagnetism in the Hubbard models with degenerate single-electron ground
+  states}, Phys. Rev. Lett. \textbf{69}, 1608--1611 (1992),
+  \href{https://doi.org/10.1103/PhysRevLett.69.1608}{doi:10.1103/PhysRevLett.69.1608}.
+
+\bibitem{Bergman2008} D.~L. Bergman, C.~Wu and L.~Balents,
+  \emph{Band touching from real-space topology in frustrated hopping models},
+  Phys. Rev. B \textbf{78}, 125104 (2008),
+  \href{https://doi.org/10.1103/PhysRevB.78.125104}{doi:10.1103/PhysRevB.78.125104}.
+
+\bibitem{RhimYang2019} J.-W.~Rhim and B.-J.~Yang,
+  \emph{Classification of flat bands according to the band-crossing singularity of Bloch
+  wave functions}, Phys. Rev. B \textbf{99}, 045107 (2019),
+  \href{https://doi.org/10.1103/PhysRevB.99.045107}{doi:10.1103/PhysRevB.99.045107}.
+
+\bibitem{Kollar2020} A.~J. Koll\'ar, M.~Fitzpatrick, P.~Sarnak and A.~A. Houck,
+  \emph{Line-graph lattices: Euclidean and non-Euclidean flat bands, and implementations in
+  circuit quantum electrodynamics}, Commun. Math. Phys. \textbf{376}, 1909--1956 (2020),
+  \href{https://doi.org/10.1007/s00220-019-03645-8}{doi:10.1007/s00220-019-03645-8}.
+
+\bibitem{Roychowdhury2024} K.~Roychowdhury, J.~Attig, S.~Trebst and M.~J. Lawler,
+  \emph{Supersymmetry on the lattice: Geometry, topology, and flat bands},
+  Phys. Rev. Research \textbf{6}, 043273 (2024),
+  \href{https://doi.org/10.1103/PhysRevResearch.6.043273}{doi:10.1103/PhysRevResearch.6.043273}.
+
+\bibitem{ChungGingras2025} K.~T.~K. Chung and M.~J.~P. Gingras,
+  \emph{2-form $U(1)$ spin liquids: A classical model and quantum aspects},
+  Phys. Rev. B \textbf{111}, 064417 (2025),
+  \href{https://doi.org/10.1103/PhysRevB.111.064417}{doi:10.1103/PhysRevB.111.064417}.
+
+\bibitem{Hazra2026} T.~Hazra,
+  \emph{New class of exactly flat topological bands---compact localised states protected by
+  local graph topology},
+  \href{https://arxiv.org/abs/2607.22831}{arXiv:2607.22831v1} (2026).
+
+\bibitem{GrossWitten1980} D.~J. Gross and E.~Witten,
+  \emph{Possible third-order phase transition in the large-$N$ lattice gauge theory},
+  Phys. Rev. D \textbf{21}, 446--453 (1980).
+
+\bibitem{Wadia1980} S.~R. Wadia,
+  \emph{$N=\infty$ phase transition in a class of exactly soluble model lattice gauge
+  theories}, Phys. Lett. B \textbf{93}, 403--410 (1980).
+
+\bibitem{MinahanPolychronakos1993} J.~A. Minahan and A.~P. Polychronakos,
+  \emph{Equivalence of two-dimensional QCD and the $c=1$ matrix model},
+  Phys. Lett. B \textbf{312}, 155--165 (1993).
+
+\bibitem{Douglas1993} M.~R. Douglas,
+  \emph{Conformal field theory techniques in large $N$ Yang--Mills theory},
+  \href{https://arxiv.org/abs/hep-th/9311130}{arXiv:hep-th/9311130} (1993).
+
+\bibitem{CBB2025} A.~N. Ciavarella, I.~M. Burbano and C.~W. Bauer,
+  \emph{Efficient truncations of lattice gauge theory for quantum simulation},
+  Phys. Rev. D \textbf{112}, 054514 (2025),
+  \href{https://arxiv.org/abs/2503.11888}{arXiv:2503.11888}.
+
+\bibitem{Balaji2026} P.~Balaji, C.~Conefrey-Shinozaki, P.~Draper, J.~K. Elhaderi, D.~Gupta,
+  L.~Hidalgo and A.~Lytle,
+  \emph{Perturbation theory, irrep truncations, and state preparation methods for quantum
+  simulations of $SU(3)$ lattice gauge theory}, Phys. Rev. D \textbf{113}, 094505 (2026),
+  \href{https://arxiv.org/abs/2509.25865}{arXiv:2509.25865}.
+
+\end{thebibliography}
+
+\end{document}
